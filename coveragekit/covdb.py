@@ -77,12 +77,14 @@ def db(dbInput, genes = None, levelsMin = None, levelsMax = None, coverageMin = 
     results["meta"]["dbLevels"] = coverageDB.levels
     for result in coverageDB.query(genes, coverageMin, coverageMax, levelsMin, levelsMax):
         results["queryResults"].append(_prettifyResult(result, levelsMinKeys, levelsMaxKeys, coverageDB.levels, reportRegions = reportRegions))
-        returnedGenes.append(results["queryResults"][-1]["id"])
+        #returnedGenes.append(results["queryResults"][-1]["id"])
     
     results["meta"]["queryString"] = coverageDB.mostRecentQuery
     results["meta"]["queryResultNum"] = len(returnedGenes)
     
     if genes:
+        for result in coverageDB.query(genes):
+            returnedGenes.append(result[0])
         notFound = set(genes)
         notFound.difference_update(set(returnedGenes))
         if notFound:

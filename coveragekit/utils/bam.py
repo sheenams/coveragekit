@@ -171,6 +171,8 @@ class BamReader(object):
                     if bamRead.query_name in readTracker:
                         insertLength += readTracker[bamRead.query_name]
                         del readTracker[bamRead.query_name]
+                        #if insertLength > 10000:
+                        #    print bamRead
                         self.insertLengths.append(insertLength)
                     else:
                         readTracker[bamRead.query_name] = insertLength + (bamRead.next_reference_start - coveragePos)
