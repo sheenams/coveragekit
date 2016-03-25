@@ -1,0 +1,8 @@
+# python #
+##########
+*~
+*.pyc
+devenv/
+build/
+cpdxbasespace.egg-info/
+dist/

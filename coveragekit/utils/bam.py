@@ -90,7 +90,7 @@ class BamReader(object):
         # Iterate over bam reads
         chunkCount = 0
         for bamRead in self.bamReads:
-            if ((not bamRead.is_duplicate) or (self.allowdups)) and (bamRead.mapping_quality >= self.qualityCutoff) and (not bamRead.is_unmapped):
+            if ((not bamRead.is_duplicate) or (self.allowdups)) and (bamRead.mapping_quality >= self.qualityCutoff) and (not bamRead.is_unmapped) and (not bamRead.is_secondary) and (not bamRead.is_supplementary):
                 # Read names in bam format don't necessarily distinguish between 1st or second read in pair, so we make this explicit
                 if bamRead.is_read1:
                     readName = "{}.1".format(bamRead.query_name)

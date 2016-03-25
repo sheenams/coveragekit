@@ -27,7 +27,7 @@ setup(
     license='DBAD',
     author='Christopher Hale',
     tests_require=['pytest'],
-    install_requires=['pysam==0.8.4','pytest==2.7.2'],
+    install_requires=['pysam>=0.8.4','pytest==2.7.2'],
     cmdclass={'test': PyTest},
     author_email='chris.joel.hale@gmail.com',
     description='NGS coverage analysis package.',
