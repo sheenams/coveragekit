@@ -69,7 +69,7 @@ def db(dbInput, genes = None, levelsMin = None, levelsMax = None, coverageMin = 
     
     returnedGenes = []
    
-    results = {"meta" : {}, "queryResults" : [] }
+    results = {"meta" : {}, "queryResults" : [], "notFound" : []}
     results["meta"]["version"] = __version__
     results["meta"]["dbSource"] = dbInput
     results["meta"]["coverageSource"] = coverageDB.coveragesource
@@ -80,7 +80,7 @@ def db(dbInput, genes = None, levelsMin = None, levelsMax = None, coverageMin = 
         #returnedGenes.append(results["queryResults"][-1]["id"])
     
     results["meta"]["queryString"] = coverageDB.mostRecentQuery
-    results["meta"]["queryResultNum"] = len(returnedGenes)
+    results["meta"]["queryResultNum"] = len(results["queryResults"])
     
     if genes:
         for result in coverageDB.query(genes):
@@ -89,6 +89,7 @@ def db(dbInput, genes = None, levelsMin = None, levelsMax = None, coverageMin = 
         notFound.difference_update(set(returnedGenes))
         if notFound:
             logger.warning("The following regions were not found in the coverage database: [{}]".format(",".join(notFound)))
+            results["notFound"].extend(list(notFound))
             
     results["queryResults"].sort(key=lambda k: k['id'])
     return results
@@ -120,6 +121,9 @@ def report(results, reportRegions = True, jsonOut = None, tsvOut = None):
                     tsvFile.write("\t{}\t{}\n".format(json.dumps(r["coverageRegions"]["lessThan"]), json.dumps(r["coverageRegions"]["greaterOrEqual"])))
                 else:
                     tsvFile.write("\n")
+
+            for r in results["notFound"]:
+                tsvFile.write("{}\tNot found in database\n".format(r))
             
     print "\n\ncoveragekit db results:"
     print "--------------"
@@ -127,6 +131,7 @@ def report(results, reportRegions = True, jsonOut = None, tsvOut = None):
     print "DB region source:\t{}".format(results["meta"]["regionSource"])
     print "DB query string:\t{}".format(results["meta"]["queryString"])
     print "Records retrieved:\t{}".format(results["meta"]["queryResultNum"])
+    print "Genes not found in database:\t{}".format(len(results["notFound"]))
     if jsonOut:
         print "JSON output:\t{}".format(jsonOut)
     if tsvOut:

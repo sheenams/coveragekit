@@ -4,5 +4,6 @@
 *.pyc
 devenv/
 build/
-cpdxbasespace.egg-info/
+coveragekit.egg-info/
+.idea/
 dist/
